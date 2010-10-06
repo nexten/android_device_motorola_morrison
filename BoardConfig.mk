@@ -35,7 +35,7 @@ TARGET_NO_BOOTLOADER := true
 BOARD_WPA_SUPPLICANT_DRIVER := WEXT
 WPA_SUPPLICANT_VERSION      := VER_0_6_X
 BOARD_WLAN_DEVICE           := bcm4325
-WIFI_DRIVER_MODULE_PATH     := "/system/lib/dhd.ko"
+WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/dhd.ko"
 WIFI_DRIVER_MODULE_ARG      := "firmware_path=/system/etc/firmware/bcm4325.hcd nvram_path=/system/etc/wifi/nvram.txt"
 WIFI_DRIVER_MODULE_NAME     := "dhd"
 

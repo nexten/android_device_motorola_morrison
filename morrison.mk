@@ -145,7 +145,7 @@ PRODUCT_COPY_FILES += \
 
 # modules
 PRODUCT_COPY_FILES += \
-    device/motorola/morrison/dhd.ko:system/lib/dhd.ko
+    device/motorola/morrison/dhd.ko:system/lib/modules/dhd.ko
 
 # The kernel
 ifeq ($(TARGET_PREBUILT_KERNEL),)
