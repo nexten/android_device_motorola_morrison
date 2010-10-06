@@ -32,7 +32,7 @@ TARGET_ARCH_VARIANT := armv6j
 TARGET_NO_BOOTLOADER := true
 
 # Wifi related defines
-BOARD_WPA_SUPPLICANT_DRIVER := wpa_supplicant
+BOARD_WPA_SUPPLICANT_DRIVER := WEXT
 WPA_SUPPLICANT_VERSION      := VER_0_6_X
 BOARD_WLAN_DEVICE           := bcm4325
 WIFI_DRIVER_MODULE_PATH     := "/system/lib/dhd.ko"

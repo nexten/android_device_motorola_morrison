@@ -70,8 +70,8 @@ service touchpad /system/bin/touchpad -a /data/touchpad.log
     oneshot
 
 # FMRadio Service
-# service fmradio /system/bin/fmradioserver
-#     class BT
+ service fmradio /system/bin/fmradioserver
+     class BT
 
 service dhcpcd /system/bin/dhcpcd -B eth0
     class WLAN
@@ -112,57 +112,4 @@ service fuel_gauge /system/bin/fuel_gauge --all
 service qmuxd /system/bin/qmuxd
     class HW
 
-on property:sys.motorola.suspended=1
-    class_stop zygote_services
-
-on property:sys.motorola.suspended=0
-    class_start zygote_services
-
-#on property:sys.motorola.infactory=1
-#    class_start ADB
-#    class_start TCMD
-#    class_start TOOL
-#    class_start ANDROID
-#    class_start MEDIA
-#    class_start BT
-#    class_start WLAN
-#    class_start HW
-    
-on property:sys.motorola.infactory=2
-    class_start ADB
-    class_start TCMD
-    class_start TOOL
-    class_start RIL
-    class_start pre-zygote_services
-    class_start zygote_services
-    class_start post-zygote_services
-    class_start ANDROID
-    class_start MEDIA
-    class_start BT
-    class_start WLAN
-    class_start HW
-    
-
-on property:sys.motorola.infactory=0
-    class_start ADB
-    class_start TOOL
-    class_start RIL
-    class_start pre-zygote_services
-    class_start zygote_services
-    class_start post-zygote_services
-    class_start ANDROID
-    class_start MEDIA
-    class_start BT
-    class_start WLAN
-    class_start HW
-    class_start TCMD
-
-on property:persist.factorytest=1
-    stop zygote
-
-on property:persist.factorytest=2
-    stop zygote
-
-on property:persist.factorytest=0
-    start zygote
 
