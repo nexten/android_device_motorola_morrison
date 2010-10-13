@@ -42,8 +42,11 @@ WIFI_DRIVER_MODULE_NAME     := "dhd"
 BOARD_KERNEL_CMDLINE := no_console_suspend=1 console=null quiet
 
 BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_BCM := true
 
 BOARD_USES_GENERIC_AUDIO := true
+
+BOARD_HAVE_FM_RADIO := true
 
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno130
 
