@@ -1,4 +1,90 @@
-on init
+on early-init
+    device mtd@misc 0460 radio diag
+
+# Set timeout value for rmnet stats.
+    write /sys/devices/virtual/net/rmnet0/timeout_suspend 5000000
+    write /sys/devices/virtual/net/rmnet0/timeout 18000000
+
+on boot
+# unmap left alt to avoid console switch
+    setkey 0x0 0x38 0x0
+# reset SEND+MENU+END
+    setkey 0x0 0xe7 0x706
+    setkey 0x0 0x8b 0x707
+
+    setkey 0x40 0xe7 0x706
+    setkey 0x40 0x8b 0x707
+
+    setkey 0x80 0xe7 0x706
+    setkey 0x80 0x8b 0x707
+
+    setkey 0xc0 0xe7 0x706
+    setkey 0xc0 0x8b 0x707
+    setkey 0xc0 0x6b 0x20c
+
+    chown radio system /sys/android_power/state
+    chown radio system /sys/android_power/request_state
+    chown radio system /sys/android_power/acquire_full_wake_lock
+    chown radio system /sys/android_power/acquire_partial_wake_lock
+    chown radio system /sys/android_power/release_wake_lock
+    chown radio system /sys/power/state
+    chown radio system /sys/power/wake_lock
+    chown radio system /sys/power/wake_unlock
+    chmod 0660 /sys/power/state
+    chmod 0660 /sys/power/wake_lock
+    chmod 0660 /sys/power/wake_unlock
+    chown system system /sys/class/timed_output/vibrator/enable
+    chown system system /sys/class/leds/keyboard-backlight/brightness
+    chown system system /sys/class/leds/keyboard1-backlight/brightness
+    chown system system /sys/class/leds/keyboard2-backlight/brightness
+    chown system system /sys/class/leds/keyboard-tcmd/brightness
+    chown system system /sys/class/leds/keyboard1-tcmd/brightness
+    chown system system /sys/class/leds/keyboard2-tcmd/brightness
+    chown system system /sys/class/leds/lcd-backlight/brightness
+    chown system system /sys/class/leds/lcd-backlight/suspend
+    chown system system /sys/class/leds/lcd-nr-backlight/brightness
+    chown system system /sys/class/leds/button-backlight/brightness
+    chown system system /sys/class/leds/jogball-backlight/brightness
+    chown system system /sys/class/leds/red/brightness
+    chown system system /sys/class/leds/green/brightness
+    chown system system /sys/class/leds/blue/brightness
+    chown system system /sys/class/leds/red/device/grpfreq
+    chown system system /sys/class/leds/red/device/grppwm
+    chown system system /sys/class/leds/red/device/blink
+    chown system system /sys/class/leds/red/brightness
+    chown system system /sys/class/leds/green/brightness
+    chown system system /sys/class/leds/blue/brightness
+    chown media media /sys/class/leds/af-led/brightness  # Motorola, rknize2, 12/05/09, IKMAP-1294
+    chown system system /sys/class/leds/red/device/grpfreq
+    chown system system /sys/class/leds/red/device/grppwm
+    chown system system /sys/class/leds/red/device/blink
+    chown system system /sys/class/leds/button-tcmd/brightness
+    chown system system /sys/class/leds/messaging/brightness
+    chown system system /sys/class/leds/messaging/blink
+    chown system system /sys/class/leds/soc/brightness
+    chown system system /sys/class/leds/soc/blink
+    chown system system /dev/als
+    chmod 0664 /dev/als
+    chown system system /sys/class/timed_output/vibrator/enable
+    chown system system /sys/module/sco/parameters/disable_esco
+    chown system system /sys/kernel/ipv4/tcp_wmem_min
+    chown system system /sys/kernel/ipv4/tcp_wmem_def
+    chown system system /sys/kernel/ipv4/tcp_wmem_max
+    chown system system /sys/kernel/ipv4/tcp_rmem_min
+    chown system system /sys/kernel/ipv4/tcp_rmem_def
+    chown system system /sys/kernel/ipv4/tcp_rmem_max
+    chown system system /dev/proximity
+    chown system system /sys/devices/platform/sfh7743.-2/proximity
+    chown root radio /proc/cmdline
+    chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
+    chown bluetooth bluetooth /proc/bluetooth/sleep/proto
+    chown bluetooth bluetooth /proc/bt_power
+    chown system system /sys/module/sco/parameters/disable_esco
+    chmod 0660 /sys/module/bluetooth_power/parameters/power
+    chmod 0660 /proc/bluetooth/sleep/proto
+    chown bluetooth bluetooth /dev/ttyHS0
+    chmod 0660 /dev/ttyHS0
+    chmod 0666 /dev/msm_snd
 
 # Vibrator
     chown system system /sys/class/vibrator/vibrator/enable
@@ -33,9 +119,6 @@ on init
     chown system system /dev/misc_helper
     chmod 0660 /dev/misc_helper
     chown system graphics /dev/graphics/fb0
-# Google Skymap wants to copybit fb0 but requests no special privileges
-    chmod 0666 /dev/graphics/fb0
-    chmod 0644 /dev/block/mmcblk0p1
 
 # Permissions needed for port_bridge
     chown root system /dev/ttyHSUSB0
@@ -63,15 +146,20 @@ service mmclog /system/bin/mmclog
     class TOOL
     oneshot
 
+#bluetooth 
+service hciattach /system/bin/brcm_patchram_plus --enable_hci --enable_lpm \
+    --baudrate 4000000 --patchram /etc/firmware/bcm4325.hcd /dev/ttyHS0
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
+    oneshot
+
+
 # Touchpad driver
 service touchpad /system/bin/touchpad -a /data/touchpad.log
     class HW
     user system
     oneshot
-
-# FMRadio Service
- service fmradio /system/bin/fmradioserver
-     class BT
 
 service dhcpcd /system/bin/dhcpcd -B eth0
     class WLAN
